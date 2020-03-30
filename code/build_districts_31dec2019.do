@@ -56,11 +56,22 @@ merge 1:1 iso_state district_standardized using ///
 merge 1:1 iso_state district_standardized using /// 
 "$temp/districts_727_cov19ind.dta", gen(mergecov19ind)
 
+* save 
+isid iso_state district_standardized
+compress 
+save "$output/indian_districts_31dec2019", replace 
+
+* export to xlsx 
+export excel iso_state district_standardized using /// 
+"$output/indian_districts_31dec2019.xlsx", replace ///
+firstrow(variables)
+
 exit 
 
+* customize excel output
 export excel iso_state district_standardized ///
 n_cov19ind state_cov19ind district_cov19ind ///
 dtname_shp districtcode_lgd census* using /// 
-"$output/indian_districts_31dec2019.xlsx", replace ///
+"$output/indian_districts_31dec2019_toinput.xlsx", replace ///
 firstrow(variables)
 
