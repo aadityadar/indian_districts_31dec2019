@@ -61,6 +61,19 @@ isid iso_state district_standardized
 compress 
 save "$output/indian_districts_31dec2019", replace 
 
+/* 
+use "$output/indian_districts_31dec2019.dta", clear
+
+* merge with mohfw district list  
+merge 1:1 iso_state district_standardized using ///
+"$temp/districts_152not158_mohfw.dta"
+
+* for google sheet 
+br iso_state district_standardized dtname_shp district_mohfw n_cov19ind state_cov19ind district_cov19ind 
+
+*/
+
+
 * export to xlsx 
 export excel iso_state district_standardized using /// 
 "$output/indian_districts_31dec2019.xlsx", replace ///

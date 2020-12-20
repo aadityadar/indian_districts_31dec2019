@@ -23,6 +23,8 @@ global code $path/code
 global output $path/output
 global temp $path/temp
 
+exit 
+
 * read mohfw data
 import excel using "$path/input/districts_158_mohfw.xlsx", clear firstrow
 
@@ -95,13 +97,26 @@ rename * *_mohfw
 rename district_standardized_mohfw district_standardized
 rename iso_state_mohfw iso_state 
 
+* extract numeric cases 
+gen cases = regexs(0) if regexm(noofpositivecases_mohfw, "[0-9]*")
+destring cases, replace 
+
+* collapse
+collapse (sum) cases (firstnm) district_mohfw, ///
+by(iso_state district_standardized)
+
 * save 
 isid iso_state district_standardized
 compress 
 save "$temp/districts_152not158_mohfw.dta", replace
 
 /*
+
+use "$temp/districts_152not158_mohfw.dta", clear 
+
 * merge with 31dec2019 district list  
 merge m:1 iso_state district_standardized using ///
 "$output/indian_districts_31dec2019.dta"
+
 */
+
